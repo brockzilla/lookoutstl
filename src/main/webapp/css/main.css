@@ -1,0 +1,32 @@
+/* --------------------- I AM SO PRETTY --------------------- */
+
+@media (max-width: 767px) {
+    body {font-size: 1em !important;}
+    h1 {font-size: 1.2em !important; margin: 0 30px 20px !important;}
+    #logo {margin: 1em auto 1em !important;}
+    #about {font-size: 0.7em !important;}
+}
+
+body {color: #f3b663; background-color: #e3483d; font-family: helvetica, arial, sans-serif; font-size: 1.2em;}
+h1 {font-family: helvetica, arial, sans-serif; font-weight: normal; font-size: 1.6em; margin: 30px;}
+input {width: 80%; font-size: 1.2em; padding: 0.2em; border-radius: 0;}
+input[type=submit] {display: inline-block; cursor: pointer; color: #74302e; background:#f7bb36; width: auto; padding: 8px 36px; border:0 none; margin-top: 18px;}
+a {color: #f8bc1e;}
+a:hover {color: #f3b663;}
+h3 {font-weight: normal; color: #fff;}
+
+#logo {width: 100%; max-width: 700px; margin: 4em auto 0.5em;}
+#locationField {margin: 1em 0;}
+#results {width: 80%; font-size: 1.4em; color: #fff; padding: 16px 20px; border: 1px solid #eee; margin: 16px auto 0;}
+#about {width: 85%; color: #b53e36; line-height: 1.5em; margin: 1.2em auto;}
+#about a {color: #b53e36;}
+#about a.noticeMe {color: #f3b663;}
+#unsubscribeForm {padding-top: 20px;}
+
+.lefty {text-align: left;}
+.centered {text-align: center;}
+.container {width: 100%; max-width: 759px; margin: 0 auto;}
+.half-input {width: 40%;}
+.choose {margin: 10px 0;}
+
+.nomarginleft {margin-left: 0 !important;}

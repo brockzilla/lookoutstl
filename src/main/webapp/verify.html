@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Look Out, STL! Verified</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noindex">
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body class="home">
+
+        <div class="content container centered">
+
+            <img id="logo" src="/img/lostl-logo.png">
+
+            <div id="results">Email Address Verified!</div>
+
+            <p>You are now on the list to receive notifications.</p>
+
+            <p>
+                Please take a second and share this on
+                <a href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Flookoutstl.com" target="_blank">Facebook</a>
+                and
+                <a href="https://twitter.com/share?source=tweetbutton&text=Get%20an%20email%20notification%20whenever%20the%20police%20receive%20a%20call%20within%20a%20few%20blocks%20of%20your%20home%20%28in%20the%20city%20of%20%23STL%29.&url=http://lookoutstl.com" target="_blank">Twitter</a>.
+            </p>
+
+        </div>
+
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var id = getParameterByName("id");
+                var hash = getParameterByName("h");
+                $.ajax({
+                    url: "/api/v1/verify/" + id + "/" + hash
+                });
+            });
+
+            function getParameterByName(name, url) {
+                if (!url) url = window.location.href;
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return "";
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
+        </script>
+
+    </body>
+</html>

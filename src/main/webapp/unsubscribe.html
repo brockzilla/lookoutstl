@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Look Out, STL! Unsubscribe</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noindex">
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body class="home">
+
+        <div class="content container centered">
+
+            <a href="/"><img id="logo" src="/img/lostl-logo.png"></a>
+
+            <div id="results">Email Address Unsubscribed!</div>
+
+            <p>You will no longer receive notifications.</p>
+
+        </div>
+
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var id = getParameterByName("id");
+                var email = getParameterByName("email");
+                var hash = getParameterByName("h");
+                $.ajax({
+                    url: "/api/v1/unsubscribe/" + id + "/" + email + "/" + hash
+                });
+            });
+
+            function getParameterByName(name, url) {
+                if (!url) url = window.location.href;
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return "";
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
+        </script>
+
+    </body>
+</html>

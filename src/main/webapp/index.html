@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Look Out, STL!</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Get an email notification whenever the police receive a call within a few blocks of your home (in the city of St. Louis). Be aware, and look out for your neighbors.">
+        <meta property="og:url" content="http://lookoutstl.com" />
+        <meta property="og:title" content="Look Out, STL!" />
+        <meta property="og:description" content="Get an email notification whenever the police receive a call within a few blocks of your home (in the city of St. Louis). Be aware, and look out for your neighbors." />
+        <meta property="og:image" content="/img/lostl-logo-640sq.png" />
+        <meta name="google-site-verification" content="hEdo8PBm-XwmcKnPQ-TAF_Mku11qdCthhzUp8YXqSGw" />
+        <link rel="image_src" href="/img/lostl-logo-640sq.png" / >
+        <link rel="stylesheet" href="/css/nice-select.css">
+        <link rel="stylesheet" href="/css/main.css">
+    </head>
+    <body class="home">
+
+        <div class="content container centered">
+
+            <img id="logo" src="/img/lostl-logo.png" alt="Look Out, STL! Logo">
+
+            <h1>Get a notification whenever the police receive a call within a few blocks of your home.</h1>
+
+            <div id="results" style="display: none;"></div>
+
+            <form id="registrationForm">
+                <div id="locationField">
+                    <input id="autocomplete" name="streetAddress" placeholder="Your Home Address" onFocus="geolocate()" type="text"></input>
+                </div>
+                <input name="emailAddress" placeholder="Your Email Address" type="text"></input>
+                <div>
+                    <div class="choose">Or, if you'd prefer Text/SMS notifications:</div>
+                    <input name="cellNumber" placeholder="Your Cell Phone" type="text"></input>
+                </div>
+                <div>
+                    <div id="carrierField">
+                        <select name="carrier">
+                            <option value="">Choose Provider</option>
+                            <option value="ATT">AT&T</option>
+                            <option value="Sprint">Sprint</option>
+                            <option value="TMobile">T-Mobile</option>
+                            <option value="Verizon">Verizon</option>
+                            <option value="MetroPCS">Metro/PCS</option>
+                            <option value="Cricket">Cricket</option>
+                            <option value="Boost">Boost</option>
+                            <option value="ProjectFi">Project Fi</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <input id="signUp" type="submit" value="Sign Up">
+            </form>
+
+            <div id="about">
+                This is a service for residents of the City of St. Louis &ndash; it works by parsing the call logs available
+                on the <a href="http://www.slmpd.org/">SLMPD website</a>.
+                <a href="/faq/" class="noticeMe">Frequently Asked Questions</a>
+            </div>
+
+        </div>
+
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        <script src="/js/jquery.nice-select.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("select").niceSelect();
+                $("#signUp").click(function(event) {
+                    event.preventDefault();
+                    var streetAddress = $("input[name='streetAddress']").val();
+                    var emailAddress = $("input[name='emailAddress']").val();
+                    var cellNumber = $("input[name='cellNumber']").val();
+                    var carrier = $("select[name='carrier']").val();
+                    $.ajax({
+                        url: "/api/v1/subscribe/" +
+                            "?streetAddress=" + encodeURIComponent(streetAddress) +
+                            "&emailAddress=" + encodeURIComponent(emailAddress) +
+                            "&cellNumber=" + encodeURIComponent(cellNumber) +
+                            "&carrier=" + encodeURIComponent(carrier),
+                        complete: function (data) {
+                            if (data.status == 200) {
+                                $("#registrationForm").hide();
+                                $("#results").text(data.responseText);
+                                $("#results").show();
+                            } else {
+                                $("#results").text(data.responseText);
+                                $("#results").show();
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+              var autocomplete;
+
+              function initAutocomplete() {
+                // Create the autocomplete object, restricting the search to geographical
+                // location types.
+                autocomplete = new google.maps.places.Autocomplete(
+                    /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+                    {types: ['geocode']});
+              }
+
+              // Bias the autocomplete object to the user's geographical location,
+              // as supplied by the browser's 'navigator.geolocation' object.
+              function geolocate() {
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(function(position) {
+                    var geolocation = {
+                      lat: position.coords.latitude,
+                      lng: position.coords.longitude
+                    };
+                    var circle = new google.maps.Circle({
+                      center: geolocation,
+                      radius: position.coords.accuracy
+                    });
+                    autocomplete.setBounds(circle.getBounds());
+                  });
+                }
+              }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDujNhsoO8uglcExh1lfVpzZAvKqMrQFoA&libraries=places&callback=initAutocomplete" async defer></script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          ga('create', 'UA-162380-15', 'auto');
+          ga('send', 'pageview');
+        </script>
+
+    </body>
+</html>
