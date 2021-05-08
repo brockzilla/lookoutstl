@@ -56,7 +56,7 @@ public class CitizenNotifier {
 
             body.append("<p><a href=\"https://www.google.com/maps/place/");
             body.append(URLEncoder.encode(Geocoder.getMappableBlock(pIncident.getBlock())));
-            body.append("\">View approximate location on map</a></p>");
+            body.append("\">View approximate location on map</a> - this is NOT the actual address of the incident.</p>");
 
             body.append("<p>Keep your eyes peeled. If you have information that might help the police, ");
             body.append("you can make an anonymous tip: ");
