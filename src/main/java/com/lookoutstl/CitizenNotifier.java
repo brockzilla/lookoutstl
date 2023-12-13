@@ -10,7 +10,8 @@ import java.sql.ResultSet;
 
 import java.net.URLEncoder;
 
-import com.sun.mail.*;
+import javax.mail.*;
+import javax.mail.internet.*;
 
 import org.jboss.resteasy.logging.Logger;
 
