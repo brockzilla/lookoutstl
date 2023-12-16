@@ -4,14 +4,14 @@
 .nice-select {
   -webkit-tap-highlight-color: transparent;
   background-color: #fff;
-  border: solid 1px #e8e8e8;
+  border: solid 1px #767676;
   box-sizing: border-box;
   clear: both;
   cursor: pointer;
   display: block;
   font-family: inherit;
   font-size: 1.2em;
-  color: #aaa;
+  color: #767676;
   font-weight: normal;
   line-height: 1.7em;
   outline: none;
@@ -30,7 +30,7 @@
   margin: 16px auto;
 }
   .nice-select:hover {
-    border-color: #dbdbdb; }
+    border-color: #767676; }
   .nice-select:active, .nice-select.open, .nice-select:focus {
     border-color: #999; }
   .nice-select:after {
