@@ -100,9 +100,9 @@ public class SLMPDWebScraper {
             try {
                 InternetAddress fromAddress = new InternetAddress(Secrets.getInstance().getAdminEmail(), "Look Out, STL!");
                 InternetAddress toAddress = fromAddress;
-                Emailer.send(fromAddress, toAddress, "Trouble parsing SLMPD website", e.toString());
-            } catch (Exception e) {
-                log.error("Trouble sending email", e);
+                Emailer.send(fromAddress, toAddress, "Trouble parsing SLMPD website", to.toString());
+            } catch (Exception e2) {
+                log.error("Trouble sending email", e2);
             }
 
         } catch (Exception e) {
@@ -111,8 +111,8 @@ public class SLMPDWebScraper {
                 InternetAddress fromAddress = new InternetAddress(Secrets.getInstance().getAdminEmail(), "Look Out, STL!");
                 InternetAddress toAddress = fromAddress;
                 Emailer.send(fromAddress, toAddress, "Trouble parsing SLMPD website", e.toString());
-            } catch (Exception e) {
-                log.error("Trouble sending email", e);
+            } catch (Exception e2) {
+                log.error("Trouble sending email", e2);
             }
         } finally {
             if (connection != null) {
