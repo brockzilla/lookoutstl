@@ -3,6 +3,8 @@ package com.lookoutstl;
 import java.util.*;
 
 import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 import java.net.URL;
 import java.net.URLConnection;
