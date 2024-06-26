@@ -44,6 +44,10 @@ public class SLMPDWebScraper {
             encoding = encoding == null ? "UTF-8" : encoding;
 
             String body = IOUtils.toString(in, encoding);
+
+            log.info(body);
+
+
             String rowStart = "<tr>";
             String rowEnd = "</tr>";
             String columnStart = "<td>";
