@@ -94,10 +94,23 @@ public class SLMPDWebScraper {
 
         } catch (SocketTimeoutException to) {
             log.error("Trouble parsing SLMPD website", to.getMessage() + " [Waited 10s]");
+            try {
+                InternetAddress fromAddress = new InternetAddress(Secrets.getInstance().getAdminEmail(), "Look Out, STL!");
+                InternetAddress toAddress = fromAddress;
+                Emailer.send(fromAddress, toAddress, "Trouble parsing SLMPD website", e.toString());
+            } catch (Exception e) {
+                log.error("Trouble sending email", e);
+            }
 
         } catch (Exception e) {
             log.error("Trouble parsing SLMPD website", e);
-
+            try {
+                InternetAddress fromAddress = new InternetAddress(Secrets.getInstance().getAdminEmail(), "Look Out, STL!");
+                InternetAddress toAddress = fromAddress;
+                Emailer.send(fromAddress, toAddress, "Trouble parsing SLMPD website", e.toString());
+            } catch (Exception e) {
+                log.error("Trouble sending email", e);
+            }
         } finally {
             if (connection != null) {
                 connection.disconnect();
