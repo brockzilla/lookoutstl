@@ -9,6 +9,9 @@ import java.net.URLConnection;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 
+import javax.mail.*;
+import javax.mail.internet.*;
+
 import org.jboss.resteasy.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
