@@ -34,14 +34,22 @@ public class SLMPDWebScraper {
     public static Collection<Incident> scrapeIncidents() {
         Collection<Incident> incidents = new ArrayList<Incident>();
 
+        log.info("Preparing to pull incidents from: " + CALLSFORSERVICE_URL);
+
+
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection)new URL(CALLSFORSERVICE_URL).openConnection();
             connection.setConnectTimeout(10000); //set timeout to 5 seconds
 
+            log.info("Connection opened...");
+
+
             InputStream in = connection.getInputStream();
             String encoding = connection.getContentEncoding();
             encoding = encoding == null ? "UTF-8" : encoding;
+
+            log.info("Getting body...");
 
             String body = IOUtils.toString(in, encoding);
 
@@ -52,6 +60,8 @@ public class SLMPDWebScraper {
             String rowEnd = "</tr>";
             String columnStart = "<td>";
             String columnEnd = "</td>";
+
+            log.info("Looping through rows...");
 
             while (body.indexOf("<tr>") >= 0) {
 
