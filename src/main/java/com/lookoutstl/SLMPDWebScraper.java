@@ -29,7 +29,7 @@ public class SLMPDWebScraper {
 
     //private static final String CALLSFORSERVICE_URL = "http://www.slmpd.org/cfs.aspx";
     // They redesigned the site on June 18, 2024
-    private static final String CALLSFORSERVICE_URL = "https://slmpd.org/calls/";
+    private static final String CALLSFORSERVICE_URL = "http://slmpd.org/calls/";
 
     public static Collection<Incident> scrapeIncidents() {
         Collection<Incident> incidents = new ArrayList<Incident>();
@@ -45,7 +45,7 @@ public class SLMPDWebScraper {
 
             String body = IOUtils.toString(in, encoding);
 
-            log.info(body);
+            log.info("Body: " + body);
 
 
             String rowStart = "<tr>";
