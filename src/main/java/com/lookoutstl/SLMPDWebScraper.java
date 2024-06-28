@@ -59,7 +59,7 @@ public class SLMPDWebScraper {
 
             while (body.indexOf(rowStart) >= 0) {
 
-                log.info("|" + body.toString() + "|");
+                //log.info("|" + body.toString() + "|");
 
                 // Give me the next row
                 String incidentRow = body.substring(body.indexOf(rowStart) + rowStart.length(), body.indexOf(rowEnd));
