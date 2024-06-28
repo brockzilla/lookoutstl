@@ -52,6 +52,12 @@ public class SLMPDWebScraper {
             String columnStart = "<td>";
             String columnEnd = "</td>";
 
+            if (body.indexOf("<tr>") >= 0) {
+                body = body.substring(body.indexOf(rowStart), body.lastIndexOf(rowEnd) + rowEnd.length());
+                log.info("Parsed Body:");
+                log.info(body.toString());
+            }
+
             while (body.indexOf("<tr>") >= 0) {
 
                 if (body.indexOf(rowStart) > 0) {
