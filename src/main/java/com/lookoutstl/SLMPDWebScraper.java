@@ -29,12 +29,13 @@ public class SLMPDWebScraper {
 
     //private static final String CALLSFORSERVICE_URL = "http://www.slmpd.org/cfs.aspx";
     // They redesigned the site on June 18, 2024
-    private static final String CALLSFORSERVICE_URL = "http://slmpd.org/calls/";
+    private static final String CALLSFORSERVICE_URL = "https://slmpd.org/calls/";
 
     public static Collection<Incident> scrapeIncidents() {
         Collection<Incident> incidents = new ArrayList<Incident>();
 
         log.info("Preparing to pull incidents from: " + CALLSFORSERVICE_URL);
+        System.out.println("Preparing to pull incidents...");
 
 
         HttpURLConnection connection = null;
@@ -43,6 +44,7 @@ public class SLMPDWebScraper {
             connection.setConnectTimeout(10000); //set timeout to 5 seconds
 
             log.info("Connection opened...");
+            System.out.println("Connection opened...");
 
 
             InputStream in = connection.getInputStream();
