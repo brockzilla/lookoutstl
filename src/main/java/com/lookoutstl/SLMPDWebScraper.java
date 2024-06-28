@@ -45,26 +45,32 @@ public class SLMPDWebScraper {
 
             String body = IOUtils.toString(in, encoding);
 
-            //log.info("Body: " + body);
-
             String rowStart = "<tr>";
             String rowEnd = "</tr>";
             String columnStart = "<td>";
             String columnEnd = "</td>";
 
-            if (body.indexOf("<tr>") >= 0) {
+            if (body.indexOf(rowStart) >= 0) {
                 body = body.substring(body.indexOf(rowStart), body.lastIndexOf(rowEnd) + rowEnd.length());
                 log.info("Parsed Body:");
-                log.info(body.toString());
+                log.info("|" + body.toString() + "|");
             }
 
-            while (body.indexOf("<tr>") >= 0) {
+            while (body.indexOf(rowStart) >= 0) {
+
+                log.info("Have rows");
+
 
                 if (body.indexOf(rowStart) > 0) {
+
+                    log.info("Have a row");
+
                     body = body.substring(body.indexOf(rowStart) + rowStart.length(), body.length());
                     String incidentRow = body.substring(0, body.indexOf(rowEnd));
 
                     if (incidentRow.indexOf(columnStart) >= 0) {
+
+                        log.info("Have a column");
 
                         String callTimestamp = stripHTML(incidentRow.substring(incidentRow.indexOf(columnStart) + columnStart.length(), incidentRow.indexOf(columnEnd)));
                         try {
@@ -111,63 +117,6 @@ public class SLMPDWebScraper {
                     incidentRow = incidentRow.substring(incidentRow.indexOf(columnEnd) + columnEnd.length(), incidentRow.length());
                 }
             }
-
-            /*
-            String body = IOUtils.toString(in, encoding);
-            String rowStart = "<tr bgcolor=\"White\">";
-            String rowEnd = "</tr>";
-            String columnStart = "<td>";
-            String columnEnd = "</td>";
-
-            while (body.indexOf("<tr bgcolor=\"White\">") >= 0) {
-
-                if (body.indexOf(rowStart) > 0) {
-                    body = body.substring(body.indexOf(rowStart) + rowStart.length(), body.length());
-                    String incidentRow = body.substring(0, body.indexOf(rowEnd));
-
-                    String callTimestamp = stripHTML(incidentRow.substring(incidentRow.indexOf(columnStart) + columnStart.length(), incidentRow.indexOf(columnEnd)));
-                    try {
-                        // Sometimes we get junk like 2016-08-03 :2:33 or 2016-08-03 ::34
-                        String[] callTime = callTimestamp.split(" ")[1].split(":");
-                        callTimestamp = callTimestamp.split(" ")[0] + " " +
-                            addZerosIfNecessary(callTime[0]) + ":" +
-                            addZerosIfNecessary(callTime[1]) + ":" +
-                            addZerosIfNecessary(callTime[2]);
-                    } catch (Exception e) {
-                        log.error("Trouble cleaning up timestamp: " + callTimestamp, e);
-                    }
-                    incidentRow = incidentRow.substring(incidentRow.indexOf(columnEnd) + columnEnd.length(), incidentRow.length());
-
-                    String id = stripHTML(incidentRow.substring(incidentRow.indexOf(columnStart) + columnStart.length(), incidentRow.indexOf(columnEnd)));
-                    incidentRow = incidentRow.substring(incidentRow.indexOf(columnEnd) + columnEnd.length(), incidentRow.length());
-
-                    String block = stripHTML(incidentRow.substring(incidentRow.indexOf(columnStart) + columnStart.length(), incidentRow.indexOf(columnEnd)));
-                    incidentRow = incidentRow.substring(incidentRow.indexOf(columnEnd) + columnEnd.length(), incidentRow.length());
-
-                    String description = stripHTML(incidentRow.substring(incidentRow.indexOf(columnStart) + columnStart.length(), incidentRow.indexOf(columnEnd)));
-                    description = description.replace("(Specify)", "");
-                    description = description.replace("(specify means)", "");
-                    description = description.replace("(Specify what they are doing)", "");
-                    description = description.replace("Attempt", "Attempted");
-                    description = description.replace("9-1-1", "911");
-                    description = description.replace("Flourishing (Specify Weapon)", "Flourishing Weapon");
-                    description = description.replace("Observation Case", "Observation/Case");
-                    description = description.replace("Larceny", "Larceny/Theft");
-                    description = description.replace("Holding a Person for a ", "Holding Person for ");
-                    description = description.replace("Nude", "Nudity");
-                    description = description.replace("Sundry", "Sundry/Various");
-                    description = description.replace("Accident (Auto Abandoned)", "Accident - Auto Abandoned");
-                    description = description.replace("Shots Fired - Into Dwelling / Property Damage", "Shots Fired into Dwelling");
-                    description = description.replace("Meet an (Officer, Watchman, Car, etc.)", "Meet an Officer/Watchman/Car");
-
-                    description = description.trim();
-
-                    incidentRow = incidentRow.substring(incidentRow.indexOf(columnEnd) + columnEnd.length(), incidentRow.length());
-
-                    incidents.add(new Incident(id, callTimestamp, block, description));
-                }
-            }
-            */
 
             log.info("Parsed: [" + CALLSFORSERVICE_URL + "] and found " + incidents.size() + " incident/s");
 
