@@ -58,8 +58,7 @@ public class SLMPDWebScraper {
 
             while (body.indexOf(rowStart) >= 0) {
 
-                log.info("Have rows");
-
+                //log.info("Have rows");
 
                 if (body.indexOf(rowStart) > 0) {
 
