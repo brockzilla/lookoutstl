@@ -50,23 +50,19 @@ public class SLMPDWebScraper {
             String columnStart = "<td>";
             String columnEnd = "</td>";
 
+            // Just give up the portion that has tabular data
             if (body.indexOf(rowStart) >= 0) {
                 body = body.substring(body.indexOf(rowStart), body.lastIndexOf(rowEnd) + rowEnd.length());
-                log.info("Parsed Body:");
-                log.info("|" + body.toString() + "|");
+                //log.info("Parsed Body:");
+                //log.info("|" + body.toString() + "|");
             }
 
             while (body.indexOf(rowStart) >= 0) {
 
-                //log.info("Have rows");
-
-                log.info("Have a row");
-
+                // Give me the next row
                 String incidentRow = body.substring(body.indexOf(rowStart) + rowStart.length(), body.indexOf(rowEnd));
 
                 if (incidentRow.indexOf(columnStart) >= 0) {
-
-                    log.info("Have a column");
 
                     String callTimestamp = stripHTML(incidentRow.substring(incidentRow.indexOf(columnStart) + columnStart.length(), incidentRow.indexOf(columnEnd)));
                     try {
@@ -105,11 +101,12 @@ public class SLMPDWebScraper {
 
                     description = description.trim();
 
-                    log.info("Storing incident: " + id + "|" + callTimestamp + "|" + block + "|" + description);
+                    //log.info("Storing incident: " + id + "|" + callTimestamp + "|" + block + "|" + description);
 
                     incidents.add(new Incident(id, callTimestamp, block, description));
                 }
 
+                // Clip off the leading row and keep going
                 body = body.substring(body.indexOf(rowEnd) + rowEnd.length(), body.length());
             }
 
