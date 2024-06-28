@@ -59,6 +59,8 @@ public class SLMPDWebScraper {
 
             while (body.indexOf(rowStart) >= 0) {
 
+                log.info("|" + body.toString() + "|");
+
                 // Give me the next row
                 String incidentRow = body.substring(body.indexOf(rowStart) + rowStart.length(), body.indexOf(rowEnd));
 
@@ -101,7 +103,7 @@ public class SLMPDWebScraper {
 
                     description = description.trim();
 
-                    //log.info("Storing incident: " + id + "|" + callTimestamp + "|" + block + "|" + description);
+                    log.info("Storing incident: " + id + "|" + callTimestamp + "|" + block + "|" + description);
 
                     incidents.add(new Incident(id, callTimestamp, block, description));
                 }
