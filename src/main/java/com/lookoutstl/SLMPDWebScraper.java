@@ -43,21 +43,14 @@ public class SLMPDWebScraper {
             String encoding = connection.getContentEncoding();
             encoding = encoding == null ? "UTF-8" : encoding;
 
-            log.info("Getting body...");
-            System.out.println("Getting body...");
-
             String body = IOUtils.toString(in, encoding);
 
-            log.info("Body: " + body);
-            System.out.println("Body: " + body);
-
+            //log.info("Body: " + body);
 
             String rowStart = "<tr>";
             String rowEnd = "</tr>";
             String columnStart = "<td>";
             String columnEnd = "</td>";
-
-            log.info("Looping through rows...");
 
             while (body.indexOf("<tr>") >= 0) {
 
@@ -103,6 +96,8 @@ public class SLMPDWebScraper {
                         description = description.replace("Meet an (Officer, Watchman, Car, etc.)", "Meet an Officer/Watchman/Car");
 
                         description = description.trim();
+
+                        log.info("Storing incident: " + id + "|" + callTimestamp + "|" + block + "|" + description);
 
                         incidents.add(new Incident(id, callTimestamp, block, description));
                     }
