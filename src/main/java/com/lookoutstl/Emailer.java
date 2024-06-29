@@ -100,6 +100,7 @@ public class Emailer {
             pEmailAddress.indexOf("@vtext.com") > 0 ||
             pEmailAddress.indexOf("@metropcs.sms.us") > 0 ||
             pEmailAddress.indexOf("@sms.mycricket.com") > 0 ||
+            pEmailAddress.indexOf("@email.uscc.net") > 0 ||
             pEmailAddress.indexOf("@sms.myboostmobile.com") > 0)) {
             return true;
         } else {

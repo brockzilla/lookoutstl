@@ -104,7 +104,7 @@ public class SLMPDWebScraper {
 
                     description = description.trim();
 
-                    log.info("Storing incident: " + id + "|" + callTimestamp + "|" + block + "|" + description);
+                    //log.info("Storing incident: " + id + "|" + callTimestamp + "|" + block + "|" + description);
 
                     incidents.add(new Incident(id, callTimestamp, block, description));
                 }
