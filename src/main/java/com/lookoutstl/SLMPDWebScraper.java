@@ -36,10 +36,8 @@ public class SLMPDWebScraper {
 
         HttpURLConnection connection = null;
         try {
-
-
-
-            connection = (HttpURLConnection)new URL(CALLSFORSERVICE_URL).openConnection();
+            // Tack on the time to avoid getting a cached dom
+            connection = (HttpURLConnection)new URL(CALLSFORSERVICE_URL + "?time=" + System.currentTimeMillis()).openConnection();
             connection.setConnectTimeout(10000); //set timeout to 5 seconds
 
             InputStream in = connection.getInputStream();
@@ -47,15 +45,6 @@ public class SLMPDWebScraper {
             encoding = encoding == null ? "UTF-8" : encoding;
 
             String body = IOUtils.toString(in, encoding);
-
-
-            connection = (HttpURLConnection)new URL(CALLSFORSERVICE_URL).openConnection();
-            connection.setConnectTimeout(10000); //set timeout to 5 seconds
-            in = connection.getInputStream();
-            encoding = connection.getContentEncoding();
-            encoding = encoding == null ? "UTF-8" : encoding;
-            body = IOUtils.toString(in, encoding);
-
 
             String rowStart = "<tr>";
             String rowEnd = "</tr>";
