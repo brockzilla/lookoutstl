@@ -39,6 +39,7 @@ public class SLMPDWebScraper {
             // Tack on the time to avoid getting a cached dom
             connection = (HttpURLConnection)new URL(CALLSFORSERVICE_URL + "?time=" + System.currentTimeMillis()).openConnection();
             connection.setConnectTimeout(10000); //set timeout to 5 seconds
+            connection.setRequestProperty("User-Agent", "LookoutSTL");
 
             InputStream in = connection.getInputStream();
             String encoding = connection.getContentEncoding();
