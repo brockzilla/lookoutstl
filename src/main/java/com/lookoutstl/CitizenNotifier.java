@@ -54,9 +54,14 @@ public class CitizenNotifier {
             body.append("<p>Call received on ").append(pIncident.getNiceCallTimestamp());
             body.append(" with Event ID: ").append(pIncident.getId()).append("</p>");
 
-            body.append("<p><a href=\"https://www.google.com/maps/place/");
-            body.append(URLEncoder.encode(Geocoder.getMappableBlock(pIncident.getBlock())));
-            body.append("\">View approximate location on map</a> - this is NOT the actual address of the incident.</p>");
+            // This resident has requested we not provide a link
+            // when the incident's approximate location maps to her address.
+            String block = Geocoder.getMappableBlock(pIncident.getBlock());
+            if (block != null && !block.toLowerCase().contains("4150 TYROLEAN")) {
+                body.append("<p><a href=\"https://www.google.com/maps/place/");
+                body.append(URLEncoder.encode(block));
+                body.append("\">View approximate location on map</a> - this is NOT the actual address of the incident.</p>");
+            }
 
             body.append("<p>Keep your eyes peeled. If you have information that might help the police, ");
             body.append("you can make an anonymous tip: ");
