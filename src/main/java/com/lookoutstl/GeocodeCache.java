@@ -44,6 +44,10 @@ public class GeocodeCache {
                     geopoint = new Geopoint(latitude, longitude);
                 }
             }
+        } catch (Exception e) {
+            //Emailer.getInstance().notify(e);
+            log.error("Trouble checking geocode cache", e);
+
         } finally {
             if (stmt != null) {
                 try {
