@@ -45,8 +45,12 @@ public class LookoutAPI {
 
                 if (incident.isNew()) {
                     try {
-                        // Identify the exact location
-                        Geopoint geopoint = Geocoder.geocode(Geocoder.getMappableBlock(incident.getBlock()));
+                        // First, check whether we already know the geopoint for this block
+                        Geopoint geopoint = GeocodeCache.lookup(streetAddress);
+                        if (Validator.isWack(geopoint)) {
+                            // If that doesn't work, we have to give Google some money :(
+                            geopoint = Geocoder.geocode(Geocoder.getMappableBlock(incident.getBlock()));
+                        }
                         incident.setLatitude(geopoint.getLatitude());
                         incident.setLongitude(geopoint.getLongitude());
 
@@ -198,8 +202,6 @@ public class LookoutAPI {
     public Response unsubscribe(@QueryParam("streetAddress") String streetAddress,
                                 @QueryParam("cellNumber") String cellNumber) {
         try {
-            Geopoint geopoint = Geocoder.geocode(streetAddress);
-
             cellNumber = stripNonDigits(cellNumber.trim());
             if (cellNumber.length() == 7) {
                 throw new Exception("Phone Number must include Area Code");
@@ -207,6 +209,7 @@ public class LookoutAPI {
                 throw new Exception("Invalid Phone Number");
             }
 
+            Geopoint geopoint = Geocoder.geocode(streetAddress);
             Integer id = Citizen.getId(cellNumber, geopoint.getLatitude(), geopoint.getLongitude());
             if (id != null) {
                 Citizen.unsubscribe(id);
