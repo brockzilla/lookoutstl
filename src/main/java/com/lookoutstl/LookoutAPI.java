@@ -46,7 +46,7 @@ public class LookoutAPI {
                 if (incident.isNew()) {
                     try {
                         // First, check whether we already know the geopoint for this block
-                        Geopoint geopoint = GeocodeCache.lookup(streetAddress);
+                        Geopoint geopoint = GeocodeCache.lookup(incident.getBlock());
                         if (Validator.isWack(geopoint)) {
                             // If that doesn't work, we have to give Google some money :(
                             geopoint = Geocoder.geocode(Geocoder.getMappableBlock(incident.getBlock()));

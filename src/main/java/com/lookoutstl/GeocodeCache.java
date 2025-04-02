@@ -1,5 +1,7 @@
 package com.lookoutstl;
 
+import com.lookoutstl.Geocoder.Geopoint;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -25,7 +27,7 @@ public class GeocodeCache {
         ResultSet rs = null;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            connection = DriverManager.getConnection(DB_CONNECTION_URL);
+            connection = DriverManager.getConnection(Persistable.DB_CONNECTION_URL);
             stmt = connection.createStatement();
 
             StringBuffer sql = new StringBuffer();
@@ -37,7 +39,7 @@ public class GeocodeCache {
             if (rs.next()) {
                 Double latitude = rs.getDouble("latitude");
                 Double longitude = rs.getDouble("longitude");
-                log.info("Found previously geocoded block: " + address + " --> " + latitude + "," + longitude);
+                log.info("Found previously geocoded block: " + pAddress + " --> " + latitude + "," + longitude);
                 if (latitude != null && longitude != null) {
                     geopoint = new Geopoint(latitude, longitude);
                 }
