@@ -37,7 +37,7 @@ public class Emailer {
 
     public static void send(InternetAddress pFromAddress, InternetAddress pToAddress, String pSubject, String pBody) {
 
-        log.info("Sending an email with subject: " + pSubject + " to recipient: " + pToAddress.getAddress());
+        log.info("Sending an email with subject: " + pSubject + " to recipient: " + pToAddress.getAddress() + " from: " + pFromAddress.getAddress());
 
         Transport transport = null;
 
