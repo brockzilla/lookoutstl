@@ -62,7 +62,7 @@ public class Emailer {
             msg.addRecipient(Message.RecipientType.TO, pToAddress);
 
             // If we're sending an SMS, don't bother with the subject
-            if (!supportsEmailToSMS(pToAddress)) {
+            if (!supportsEmailToSMS(pToAddress.toString())) {
                 msg.setSubject(pSubject);
             }
 
