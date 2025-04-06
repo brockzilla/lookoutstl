@@ -37,7 +37,7 @@ public class Emailer {
 
     public static void send(InternetAddress pFromAddress, InternetAddress pToAddress, String pSubject, String pBody) {
 
-        log.info("Sending an email with subject: " + pSubject + " to recipient: " + pToAddress.getAddress() + " from: " + pFromAddress.getAddress());
+        log.info("Sending an email with subject: " + pSubject + " to recipient: " + pToAddress.getAddress());
 
         Transport transport = null;
 
@@ -61,7 +61,10 @@ public class Emailer {
             msg.setFrom(pFromAddress);
             msg.addRecipient(Message.RecipientType.TO, pToAddress);
 
-            msg.setSubject(pSubject);
+            // If we're sending an SMS, don't bother with the subject
+            if (!supportsEmailToSMS(pToAddress)) {
+                msg.setSubject(pSubject);
+            }
 
             if (pBody.indexOf("<") >= 0 && pBody.indexOf(">") >= 0) {
                 //log.info("Found brackets, sending as HTML email...");
