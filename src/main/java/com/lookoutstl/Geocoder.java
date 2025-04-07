@@ -123,7 +123,7 @@ public class Geocoder {
             Double latitude = (Double)location.get("lat");
             Double longitude = (Double)location.get("lng");
 
-            log.info("Geocoded block: " + address + " --> " + latitude + "," + longitude);
+            log.info("Geocoded block: " + pAddress + " --> " + latitude + "," + longitude);
             return new Geopoint(latitude, longitude);
         }
     }

@@ -60,11 +60,7 @@ public class Emailer {
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom(pFromAddress);
             msg.addRecipient(Message.RecipientType.TO, pToAddress);
-
-            // If we're sending an SMS, don't bother with the subject
-            if (!supportsEmailToSMS(pToAddress.toString())) {
-                msg.setSubject(pSubject);
-            }
+            msg.setSubject(pSubject);
 
             if (pBody.indexOf("<") >= 0 && pBody.indexOf(">") >= 0) {
                 //log.info("Found brackets, sending as HTML email...");

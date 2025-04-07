@@ -39,7 +39,7 @@ public class GeocodeCache {
             if (rs.next()) {
                 Double latitude = rs.getDouble("latitude");
                 Double longitude = rs.getDouble("longitude");
-                log.info("Found previously geocoded block: " + pAddress + " --> " + latitude + "," + longitude);
+                //log.info("Found previously geocoded block: " + pAddress + " --> " + latitude + "," + longitude);
                 if (latitude != null && longitude != null) {
                     geopoint = new Geopoint(latitude, longitude);
                 }
