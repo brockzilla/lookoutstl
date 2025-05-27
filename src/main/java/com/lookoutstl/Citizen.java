@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 import java.text.DecimalFormat;
+import java.util.Date;
 
 import org.jboss.resteasy.logging.Logger;
 
@@ -22,6 +23,7 @@ public class Citizen extends Persistable {
     private String address = null;
     private Double latitude = null;
     private Double longitude = null;
+    private Date registeredDate = null;
 
     public Citizen(String pEmail, String pAddress, Double pLatitude, Double pLongitude) {
         super();
@@ -29,6 +31,7 @@ public class Citizen extends Persistable {
         this.address = pAddress;
         this.latitude = pLatitude;
         this.longitude = pLongitude;
+        this.registeredDate = new Date(); // Set to current time
     }
 
     public Citizen(int pId, String pEmail, String pPhone, String pAddress, Double pLatitude, Double pLongitude) {
@@ -83,6 +86,14 @@ public class Citizen extends Persistable {
         this.emailVerified = pIsVerified;
     }
 
+    public Date getRegisteredDate() {
+        return this.registeredDate;
+    }
+
+    public void setRegisteredDate(Date pValue) {
+        this.registeredDate = pValue;
+    }
+
     public void save() throws PersistenceException {
         Connection connection = null;
         Statement stmt = null;
@@ -92,13 +103,14 @@ public class Citizen extends Persistable {
 
             StringBuffer sql = new StringBuffer();
             if (this.getId(this.getEmail()) == null) {
-                sql.append("insert into citizens (email, phone, address, latitude, longitude, geo) values (");
+                sql.append("insert into citizens (email, phone, address, latitude, longitude, geo, registered_date) values (");
                 sql.append(toDBString(this.getEmail())).append(",");
                 sql.append(toDBString(this.getPhone())).append(",");
                 sql.append(toDBString(this.getAddress())).append(",");
                 sql.append(this.getLatitude()).append(",");
                 sql.append(this.getLongitude()).append(",");
-                sql.append("ST_GeomFromText('POINT(").append(this.getLongitude()).append(" ").append(this.getLatitude()).append(")')");
+                sql.append("ST_GeomFromText('POINT(").append(this.getLongitude()).append(" ").append(this.getLatitude()).append(")')").append(",");
+                sql.append("NOW()");
                 sql.append(")");
             } else {
                 throw new PersistenceException("This Email Address is Already Subscribed");

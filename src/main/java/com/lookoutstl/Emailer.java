@@ -43,7 +43,7 @@ public class Emailer {
         send(pFromAddress, pToAddress, pSubject, pBody, null, null);
     }
 
-    public static void send(InternetAddress pFromAddress, InternetAddress pToAddress, String pSubject, String pBody, Integer pCitizenId, Integer pIncidentId) {
+    public static void send(InternetAddress pFromAddress, InternetAddress pToAddress, String pSubject, String pBody, Integer pCitizenId, String pIncidentId) {
         log.info("Sending an email with subject: " + pSubject + " to recipient: " + pToAddress.getAddress());
 
         Transport transport = null;
@@ -98,7 +98,7 @@ public class Emailer {
             }
             
             if (pIncidentId != null) {
-                sql.append(", ").append(pIncidentId);
+                sql.append(", ").append(Persistable.toDBString(pIncidentId));
             } else {
                 sql.append(", NULL");
             }
