@@ -124,7 +124,7 @@ public class SLMPDWebScraper {
                 StringWriter sw = new StringWriter();
                 to.printStackTrace(new PrintWriter(sw));
                 String exceptionAsString = sw.toString();
-                Emailer.send(fromAddress, toAddress, "Trouble parsing SLMPD website", exceptionAsString);
+                Emailer.send(fromAddress, toAddress, "Trouble parsing SLMPD website", exceptionAsString, null, null);
             } catch (Exception e2) {
                 log.error("Trouble sending email", e2);
             }
@@ -137,7 +137,7 @@ public class SLMPDWebScraper {
                 StringWriter sw = new StringWriter();
                 e.printStackTrace(new PrintWriter(sw));
                 String exceptionAsString = sw.toString();
-                Emailer.send(fromAddress, toAddress, "Trouble parsing SLMPD website", exceptionAsString);
+                Emailer.send(fromAddress, toAddress, "Trouble parsing SLMPD website", exceptionAsString, null, null);
             } catch (Exception e2) {
                 log.error("Trouble sending email", e2);
             }

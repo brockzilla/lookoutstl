@@ -2,6 +2,10 @@ package com.lookoutstl;
 
 import java.io.IOException;
 import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -36,10 +40,15 @@ public class Emailer {
     }
 
     public static void send(InternetAddress pFromAddress, InternetAddress pToAddress, String pSubject, String pBody) {
+        send(pFromAddress, pToAddress, pSubject, pBody, null, null);
+    }
 
+    public static void send(InternetAddress pFromAddress, InternetAddress pToAddress, String pSubject, String pBody, Integer pCitizenId, Integer pIncidentId) {
         log.info("Sending an email with subject: " + pSubject + " to recipient: " + pToAddress.getAddress());
 
         Transport transport = null;
+        Connection connection = null;
+        Statement stmt = null;
 
         try {
             // Create a Properties object to contain connection configuration information.
@@ -63,29 +72,60 @@ public class Emailer {
             msg.setSubject(pSubject);
 
             if (pBody.indexOf("<") >= 0 && pBody.indexOf(">") >= 0) {
-                //log.info("Found brackets, sending as HTML email...");
                 msg.setContent(pBody, "text/html; charset=utf-8");
             } else {
-                //log.info("No brackets found, sending as TXT email...");
                 msg.setContent(pBody,"text/plain");
             }
 
             transport = session.getTransport();
 
-            //log.info("Attempting to send an email through the Amazon SES SMTP interface...");
             transport.connect(SES_HOST, SES_SMTP_USERNAME, SES_SMTP_PASSWORD);
             transport.sendMessage(msg, msg.getAllRecipients());
-            //log.info("Email sent!");
+
+            // Record the email activity in the database
+            connection = DriverManager.getConnection(Persistable.DB_CONNECTION_URL);
+            stmt = connection.createStatement();
+
+            StringBuffer sql = new StringBuffer();
+            sql.append("INSERT INTO notifications (to_address, subject, citizen_id, incident_id) VALUES (");
+            sql.append(Persistable.toDBString(pToAddress.getAddress())).append(", ");
+            sql.append(Persistable.toDBString(pSubject));
+            
+            if (pCitizenId != null) {
+                sql.append(", ").append(pCitizenId);
+            } else {
+                sql.append(", NULL");
+            }
+            
+            if (pIncidentId != null) {
+                sql.append(", ").append(pIncidentId);
+            } else {
+                sql.append(", NULL");
+            }
+            
+            sql.append(")");
+            
+            stmt.executeUpdate(sql.toString());
 
         } catch (Exception e) {
             log.error("Trouble sending email", e);
         } finally {
-            if (Validator.isCool(transport)) {
+            if (transport != null) {
                 try {
                     transport.close();
                 } catch (MessagingException me) {
                     log.error("Trouble closing transport", me);
                 }
+            }
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException sqlEx) { } // ignore
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException sqlEx) { } // ignore
             }
         }
     }
@@ -108,6 +148,5 @@ public class Emailer {
     }
 
     public static void notify(Exception pException) {
-
     }
 }

@@ -165,7 +165,7 @@ public class LookoutAPI {
             try {
                 InternetAddress fromAddress = new InternetAddress(Secrets.getInstance().getAdminEmail(), "Look Out, STL!");
                 InternetAddress toAddress = new InternetAddress(citizen.getEmail());
-                Emailer.send(fromAddress, toAddress, subject, body.toString());
+                Emailer.send(fromAddress, toAddress, subject, body.toString(), citizen.getId(citizen.getEmail()), null);
             } catch (Exception e) {
                 log.error("Trouble sending email", e);
             }

@@ -31,7 +31,7 @@ public class CitizenNotifier {
             try {
                 InternetAddress fromAddress = new InternetAddress(Secrets.getInstance().getAdminEmail(), "Look Out, STL!");
                 InternetAddress toAddress = new InternetAddress(citizen.getEmail());
-                Emailer.send(fromAddress, toAddress, subject, getMessage(pIncident, citizen));
+                Emailer.send(fromAddress, toAddress, subject, getMessage(pIncident, citizen), citizen.getId(), pIncident.getId());
             } catch (Exception e) {
                 log.error("Trouble sending email", e);
             }
