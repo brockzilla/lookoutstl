@@ -34,6 +34,14 @@
   </welcome-file-list>
 
   <!-- ==================== Security Constraint ===================== -->
+  <!-- Allow HTTP access for ACME challenge -->
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>ACME Challenge</web-resource-name>
+      <url-pattern>/.well-known/acme-challenge/*</url-pattern>
+    </web-resource-collection>
+  </security-constraint>
+
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>Entire Application</web-resource-name>
