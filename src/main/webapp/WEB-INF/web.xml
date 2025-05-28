@@ -14,6 +14,11 @@
   <!-- ==================== Servlets ===================== -->
 
   <servlet-mapping>
+      <servlet-name>default</servlet-name>
+      <url-pattern>/.well-known/acme-challenge/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
       <servlet-name>UtilityServlet</servlet-name>
       <url-pattern>/servlet/utility</url-pattern>
   </servlet-mapping>
