@@ -14,11 +14,6 @@
   <!-- ==================== Servlets ===================== -->
 
   <servlet-mapping>
-      <servlet-name>default</servlet-name>
-      <url-pattern>/.well-known/acme-challenge/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
       <servlet-name>UtilityServlet</servlet-name>
       <url-pattern>/servlet/utility</url-pattern>
   </servlet-mapping>
@@ -38,25 +33,5 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 
-  <!-- ==================== Security Constraint ===================== -->
-  <!-- Allow HTTP access for ACME challenge -->
-  <security-constraint>
-    <web-resource-collection>
-      <web-resource-name>ACME Challenge</web-resource-name>
-      <url-pattern>/.well-known/acme-challenge/*</url-pattern>
-    </web-resource-collection>
-  </security-constraint>
-
-  <!-- Commenting out HTTPS requirement temporarily
-  <security-constraint>
-    <web-resource-collection>
-      <web-resource-name>Entire Application</web-resource-name>
-      <url-pattern>/*</url-pattern>
-    </web-resource-collection>
-    <user-data-constraint>
-      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-    </user-data-constraint>
-  </security-constraint>
-  -->
 
 </web-app>
