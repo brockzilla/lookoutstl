@@ -13,6 +13,15 @@
 
   <!-- ==================== Servlets ===================== -->
 
+  <servlet>
+      <servlet-name>RedirectServlet</servlet-name>
+      <servlet-class>com.lookoutstl.RedirectServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>RedirectServlet</servlet-name>
+      <url-pattern>/*</url-pattern>
+  </servlet-mapping>
+
   <servlet-mapping>
       <servlet-name>UtilityServlet</servlet-name>
       <url-pattern>/servlet/utility</url-pattern>
