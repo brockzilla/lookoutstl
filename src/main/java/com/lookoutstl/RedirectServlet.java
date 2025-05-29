@@ -21,6 +21,10 @@ public class RedirectServlet extends HttpServlet {
                 redirectUrl += "?" + queryString;
             }
             response.sendRedirect(redirectUrl);
+        } else {
+            // Forward HTTP requests to the default servlet
+            RequestDispatcher dispatcher = request.getRequestDispatcher(uri);
+            dispatcher.forward(request, response);
         }
     }
 }
