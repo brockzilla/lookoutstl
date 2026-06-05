@@ -42,7 +42,7 @@ public class Incident extends Persistable {
         String niceTime = null;
         try {
             if (this.callTimestamp != null) {
-                Date theDate = Persistable.DB_DATE_FORMAT.parse(this.callTimestamp);
+                Date theDate = Persistable.parseDate(this.callTimestamp);
                 niceTime = Persistable.DISPLAY_DATE_FORMAT.format(theDate) + " at " + Persistable.DISPLAY_TIME_FORMAT.format(theDate);
             }
         } catch (Exception e) {
