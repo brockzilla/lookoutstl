@@ -38,6 +38,9 @@ public class LookoutAPI {
         log.info("INFO: Ingesting incidents from SLMPD call log...");
 
         int alreadyIngested = 0;
+        int incidentSaveFailures = 0;
+        StringBuffer incidentSaveFailureReport = new StringBuffer();
+        PersistenceException firstIncidentSaveException = null;
 
         try {
             // get incidents from SLMPDWebScraper
@@ -75,8 +78,15 @@ public class LookoutAPI {
                             // we don't care about these
                         }
                     } catch (PersistenceException pe) {
-                        log.error("Trouble saving incident with id: " + incident.getId() +
-                            " - " + pe.getMessage() + " - will not notify");
+                        String message = "Trouble saving incident with id: " + incident.getId() +
+                            " and timestamp: " + incident.getCallTimestamp() +
+                            " - " + pe.getMessage() + " - will not notify";
+                        log.error(message);
+                        incidentSaveFailures++;
+                        incidentSaveFailureReport.append(message).append("\n");
+                        if (firstIncidentSaveException == null) {
+                            firstIncidentSaveException = pe;
+                        }
                     }
 
                 } else {
@@ -88,10 +98,15 @@ public class LookoutAPI {
                 log.warn("Skipped " + alreadyIngested + " previous ingested incident/s");
             }
 
+            if (incidentSaveFailures > 0) {
+                Emailer.notify("Trouble saving SLMPD incidents",
+                    new Exception(incidentSaveFailureReport.toString(), firstIncidentSaveException));
+            }
+
             return Response.status(Response.Status.OK).entity("Ingestion Complete").build();
 
         } catch (Exception e) {
-            Emailer.getInstance().notify(e);
+            Emailer.notify(e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Ingestion Failure").build();
         }
     }

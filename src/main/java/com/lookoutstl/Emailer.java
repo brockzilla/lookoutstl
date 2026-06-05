@@ -1,6 +1,8 @@
 package com.lookoutstl;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -148,5 +150,18 @@ public class Emailer {
     }
 
     public static void notify(Exception pException) {
+        notify("Look Out, STL! application error", pException);
+    }
+
+    public static void notify(String pSubject, Exception pException) {
+        try {
+            InternetAddress fromAddress = new InternetAddress(Secrets.getInstance().getAdminEmail(), "Look Out, STL!");
+            InternetAddress toAddress = fromAddress;
+            StringWriter sw = new StringWriter();
+            pException.printStackTrace(new PrintWriter(sw));
+            Emailer.send(fromAddress, toAddress, pSubject, sw.toString(), null, null);
+        } catch (Exception e) {
+            log.error("Trouble sending admin notification", e);
+        }
     }
 }
