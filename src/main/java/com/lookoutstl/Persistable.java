@@ -13,12 +13,16 @@ public abstract class Persistable {
     public static final String DB_CONNECTION_URL = Secrets.getInstance().getDbConnectionURL();
 
     public static SimpleDateFormat DB_DATE_FORMAT;
+    public static SimpleDateFormat SOURCE_DB_DATE_WITH_MERIDIEM_FORMAT;
+    public static SimpleDateFormat SOURCE_DATE_WITH_MERIDIEM_FORMAT;
     public static SimpleDateFormat SOURCE_DATE_FORMAT;
     public static SimpleDateFormat DISPLAY_DATE_FORMAT;
     public static SimpleDateFormat DISPLAY_TIME_FORMAT;
 
     static {
         DB_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SOURCE_DB_DATE_WITH_MERIDIEM_FORMAT = new SimpleDateFormat("yyyy-MM-dd h:mm:ss aa");
+        SOURCE_DATE_WITH_MERIDIEM_FORMAT = new SimpleDateFormat("M/d/yyyy h:mm:ss aa");
         SOURCE_DATE_FORMAT = new SimpleDateFormat("M/d/yyyy HH:mm:ss");
         DISPLAY_DATE_FORMAT = new SimpleDateFormat("EEEE, MMMM dd");
         DISPLAY_TIME_FORMAT = new SimpleDateFormat("h:mm aa");
@@ -63,7 +67,7 @@ public abstract class Persistable {
 
     public static Date parseDate(String pValue) throws ParseException {
         ParseException lastException = null;
-        SimpleDateFormat[] formats = { DB_DATE_FORMAT, SOURCE_DATE_FORMAT };
+        SimpleDateFormat[] formats = { SOURCE_DB_DATE_WITH_MERIDIEM_FORMAT, SOURCE_DATE_WITH_MERIDIEM_FORMAT, DB_DATE_FORMAT, SOURCE_DATE_FORMAT };
 
         for (int i = 0; i < formats.length; i++) {
             try {

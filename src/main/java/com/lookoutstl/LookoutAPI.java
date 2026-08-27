@@ -81,6 +81,10 @@ public class LookoutAPI {
                         String message = "Trouble saving incident with id: " + incident.getId() +
                             " and timestamp: " + incident.getCallTimestamp() +
                             " - " + pe.getMessage() + " - will not notify";
+                        if (pe.getMessage() != null && pe.getMessage().indexOf("Duplicate entry") >= 0) {
+                            log.info(message);
+                            continue;
+                        }
                         log.error(message);
                         incidentSaveFailures++;
                         incidentSaveFailureReport.append(message).append("\n");

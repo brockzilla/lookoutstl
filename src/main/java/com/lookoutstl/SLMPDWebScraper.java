@@ -71,11 +71,13 @@ public class SLMPDWebScraper {
                     String callTimestamp = stripHTML(incidentRow.substring(incidentRow.indexOf(columnStart) + columnStart.length(), incidentRow.indexOf(columnEnd)));
                     try {
                         // Sometimes we get junk like 2016-08-03 :2:33 or 2016-08-03 ::34
-                        String[] callTime = callTimestamp.split(" ")[1].split(":");
-                        callTimestamp = callTimestamp.split(" ")[0] + " " +
+                        String[] timestampParts = callTimestamp.trim().split("\\s+");
+                        String[] callTime = timestampParts[1].split(":");
+                        callTimestamp = timestampParts[0] + " " +
                             addZerosIfNecessary(callTime[0]) + ":" +
                             addZerosIfNecessary(callTime[1]) + ":" +
-                            addZerosIfNecessary(callTime[2]);
+                            addZerosIfNecessary(callTime[2]) +
+                            (timestampParts.length > 2 ? " " + timestampParts[2] : "");
                     } catch (Exception e) {
                         log.error("Trouble cleaning up timestamp: " + callTimestamp, e);
                     }
