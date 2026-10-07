@@ -28,6 +28,10 @@ public class CitizenNotifier {
         String subject = pIncident.getDescription() + " - " + pIncident.getBlock();
 
         for (Citizen citizen : nearbyCitizens) {
+            if (citizen.hasSMSEmail()) {
+                log.info("Skipping email-to-SMS notification for citizen id: " + citizen.getId());
+                continue;
+            }
             try {
                 InternetAddress fromAddress = new InternetAddress(Secrets.getInstance().getAdminEmail(), "Look Out, STL!");
                 InternetAddress toAddress = new InternetAddress(citizen.getEmail());
@@ -41,43 +45,34 @@ public class CitizenNotifier {
     private static String getMessage(Incident pIncident, Citizen pCitizen) {
         StringBuffer body = new StringBuffer();
 
-        if (pCitizen.hasSMSEmail()) {
+        body.append("<h2>").append(pIncident.getDescription()).append(" - ").append(pIncident.getBlock()).append("</h2>");
 
-            // Should we repeat the incident description and location here?
-            body.append(pIncident.getNiceCallTimestamp()).append(" - ");
-            body.append("Got a tip? 314-231-1212");
+        body.append("<p>Call received on ").append(pIncident.getNiceCallTimestamp());
+        body.append(" with Event ID: ").append(pIncident.getId()).append("</p>");
 
-        } else {
-
-            body.append("<h2>").append(pIncident.getDescription()).append(" - ").append(pIncident.getBlock()).append("</h2>");
-
-            body.append("<p>Call received on ").append(pIncident.getNiceCallTimestamp());
-            body.append(" with Event ID: ").append(pIncident.getId()).append("</p>");
-
-            // This resident has requested we not provide a link
-            // when the incident's approximate location maps to her address.
-            String block = Geocoder.getMappableBlock(pIncident.getBlock());
-            if (block != null && !block.toLowerCase().contains("4150 TYROLEAN")) {
-                body.append("<p><a href=\"https://www.google.com/maps/place/");
-                body.append(URLEncoder.encode(block));
-                body.append("\">View approximate location on map</a> - this is NOT the actual address of the incident.</p>");
-            }
-
-            body.append("<p>Keep your eyes peeled. If you have information that might help the police, ");
-            body.append("you can make an anonymous tip: ");
-            body.append("<ul>");
-            body.append("  <li>Call the SLMPD at 314-231-1212</li>");
-            body.append("  <li>Contact <a href=\"http://stlrcs.org/\">CrimeStoppers</a> at 866-371-8477</li>");
-            body.append("</ul>");
-
-            body.append("<p>Remember, for <strong>EMERGENCIES, ALWAYS DIAL 911!</strong></p>");
-
-            body.append("<p>If you no longer wish to receive these notifications: <a href=\"http://lookoutstl.com/unsubscribe.html");
-            body.append("?id=").append(pCitizen.getId());
-            body.append("&email=").append(pCitizen.getEmail());
-            body.append("&h=").append(LookoutAPI.getHash(pCitizen.getEmail()));
-            body.append("\">Unsubscribe</a>.</p>");
+        // This resident has requested we not provide a link
+        // when the incident's approximate location maps to her address.
+        String block = Geocoder.getMappableBlock(pIncident.getBlock());
+        if (block != null && !block.toLowerCase().contains("4150 TYROLEAN")) {
+            body.append("<p><a href=\"https://www.google.com/maps/place/");
+            body.append(URLEncoder.encode(block));
+            body.append("\">View approximate location on map</a> - this is NOT the actual address of the incident.</p>");
         }
+
+        body.append("<p>Keep your eyes peeled. If you have information that might help the police, ");
+        body.append("you can make an anonymous tip: ");
+        body.append("<ul>");
+        body.append("  <li>Call the SLMPD at 314-231-1212</li>");
+        body.append("  <li>Contact <a href=\"http://stlrcs.org/\">CrimeStoppers</a> at 866-371-8477</li>");
+        body.append("</ul>");
+
+        body.append("<p>Remember, for <strong>EMERGENCIES, ALWAYS DIAL 911!</strong></p>");
+
+        body.append("<p>If you no longer wish to receive these notifications: <a href=\"http://lookoutstl.com/unsubscribe.html");
+        body.append("?id=").append(pCitizen.getId());
+        body.append("&email=").append(pCitizen.getEmail());
+        body.append("&h=").append(LookoutAPI.getHash(pCitizen.getEmail()));
+        body.append("\">Unsubscribe</a>.</p>");
 
         return body.toString();
     }

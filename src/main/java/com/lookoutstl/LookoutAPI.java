@@ -118,41 +118,12 @@ public class LookoutAPI {
     @GET @Path("/subscribe/")
     public Response subscribe(@QueryParam("streetAddress") String streetAddress,
                               @QueryParam("emailAddress") String emailAddress,
-                              @QueryParam("cellNumber") String cellNumber,
-                              @QueryParam("carrier") String carrier) {
+                              @QueryParam("cellNumber") String cellNumber) {
         try {
             Geopoint geopoint = Geocoder.geocode(streetAddress);
 
-            if (Validator.isCool(cellNumber) && Validator.isWack(carrier)) {
-                throw new Exception("Please select your cell phone provider");
-
-            } else if (Validator.isCool(cellNumber) && Validator.isCool(carrier)) {
-
-                if ("Other".equals(carrier)) {
-                    throw new Exception("Sorry, we can't send SMS alerts to other carriers");
-                }
-
-                cellNumber = stripNonDigits(cellNumber.trim());
-                if (cellNumber.length() == 7) {
-                    throw new Exception("Phone Number must include Area Code");
-                } else if (cellNumber.length() != 10) {
-                    throw new Exception("Invalid Phone Number");
-                }
-
-                log.info("Carrier: " + carrier);
-                String smsEmailHost = null;
-                switch (carrier) {
-                    case "ATT" : smsEmailHost = "@txt.att.net"; break;
-                    case "Sprint" : smsEmailHost = "@messaging.sprintpcs.com"; break;
-                    case "TMobile" : smsEmailHost = "@tmomail.net"; break;
-                    case "Verizon" : smsEmailHost = "@vtext.com"; break;
-                    case "MetroPCS" : smsEmailHost = "@metropcs.sms.us"; break;
-                    case "Cricket" : smsEmailHost = "@sms.mycricket.com"; break;
-                    case "Boost" : smsEmailHost = "@sms.myboostmobile.com"; break;
-                    case "ProjectFi" : smsEmailHost = "@msg.fi.google.com"; break;
-                }
-
-                emailAddress = cellNumber + smsEmailHost;
+            if (Validator.isCool(cellNumber) || Emailer.isEmailToSmsAddress(emailAddress)) {
+                throw new Exception("Text/SMS notifications are no longer available. Please sign up with an email address.");
             }
 
             if (!Validator.isEmailAddress(emailAddress)) {
@@ -166,20 +137,13 @@ public class LookoutAPI {
 
             String subject = "Confirm your Email Address";
             StringBuffer body = new StringBuffer();
-
-            if (citizen.hasSMSEmail()) {
-                body.append("http://lookoutstl.com/verify.html");
-                body.append("?id=").append(citizen.getId(citizen.getEmail()).toString());
-                body.append("&h=").append(getHash(citizen.getEmail()));
-            } else {
-                body.append("<h2>Almost done!</h2>");
-                body.append("<p>Your account has been created, but we need you to let us know that you've received this email by clicking the link below.</p>");
-                body.append("<p><a href=\"http://lookoutstl.com/verify.html");
-                body.append("?id=").append(citizen.getId(citizen.getEmail()).toString());
-                body.append("&email=").append(citizen.getEmail());
-                body.append("&h=").append(getHash(citizen.getEmail()));
-                body.append("\">Confirm this Email Address</a></p>");
-            }
+            body.append("<h2>Almost done!</h2>");
+            body.append("<p>Your account has been created, but we need you to let us know that you've received this email by clicking the link below.</p>");
+            body.append("<p><a href=\"http://lookoutstl.com/verify.html");
+            body.append("?id=").append(citizen.getId(citizen.getEmail()).toString());
+            body.append("&email=").append(citizen.getEmail());
+            body.append("&h=").append(getHash(citizen.getEmail()));
+            body.append("\">Confirm this Email Address</a></p>");
 
             try {
                 InternetAddress fromAddress = new InternetAddress(Secrets.getInstance().getAdminEmail(), "Look Out, STL!");

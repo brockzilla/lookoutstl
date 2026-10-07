@@ -11,7 +11,6 @@
         <meta property="og:image" content="/img/lostl-logo-640sq.png" />
         <meta name="google-site-verification" content="hEdo8PBm-XwmcKnPQ-TAF_Mku11qdCthhzUp8YXqSGw" />
         <link rel="image_src" href="/img/lostl-logo-640sq.png" / >
-        <link rel="stylesheet" href="/css/nice-select.css">
         <link rel="stylesheet" href="/css/main.css">
     </head>
     <body class="home">
@@ -20,7 +19,7 @@
 
             <img id="logo" src="/img/lostl-logo.png" alt="Look Out, STL! Logo">
 
-            <h1>Get a notification whenever the police receive a call within a few blocks of your home.</h1>
+            <h1>Get an email whenever the police receive a call within a few blocks of your home.</h1>
 
             <div id="results" style="display: none;"></div>
 
@@ -29,26 +28,6 @@
                     <input id="autocomplete" name="streetAddress" placeholder="Your Home Address" onFocus="geolocate()" type="text"></input>
                 </div>
                 <input name="emailAddress" placeholder="Your Email Address" type="text"></input>
-                <div>
-                    <div class="choose">Or, if you'd prefer Text/SMS notifications:</div>
-                    <input name="cellNumber" placeholder="Your Cell Phone" type="text"></input>
-                </div>
-                <div>
-                    <div id="carrierField">
-                        <select name="carrier">
-                            <option value="">Choose Provider</option>
-                            <option value="ATT">AT&T</option>
-                            <option value="Sprint">Sprint</option>
-                            <option value="TMobile">T-Mobile</option>
-                            <option value="Verizon">Verizon</option>
-                            <option value="MetroPCS">Metro/PCS</option>
-                            <option value="Cricket">Cricket</option>
-                            <option value="Boost">Boost</option>
-                            <option value="ProjectFi">Project Fi</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
                 <input id="signUp" type="submit" value="Sign Up">
             </form>
 
@@ -62,23 +41,17 @@
         </div>
 
         <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-        <script src="/js/jquery.nice-select.min.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function() {
-                $("select").niceSelect();
                 $("#signUp").click(function(event) {
                     event.preventDefault();
                     var streetAddress = $("input[name='streetAddress']").val();
                     var emailAddress = $("input[name='emailAddress']").val();
-                    var cellNumber = $("input[name='cellNumber']").val();
-                    var carrier = $("select[name='carrier']").val();
                     $.ajax({
                         url: "/api/v1/subscribe/" +
                             "?streetAddress=" + encodeURIComponent(streetAddress) +
-                            "&emailAddress=" + encodeURIComponent(emailAddress) +
-                            "&cellNumber=" + encodeURIComponent(cellNumber) +
-                            "&carrier=" + encodeURIComponent(carrier),
+                            "&emailAddress=" + encodeURIComponent(emailAddress),
                         complete: function (data) {
                             if (data.status == 200) {
                                 $("#registrationForm").hide();

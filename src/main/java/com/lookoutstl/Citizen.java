@@ -53,7 +53,7 @@ public class Citizen extends Persistable {
     }
 
     public boolean hasSMSEmail() {
-        return Emailer.supportsEmailToSMS(this.getEmail());
+        return Emailer.isEmailToSmsAddress(this.getEmail());
     }
 
     public String getPhone() {

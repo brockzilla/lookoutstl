@@ -46,6 +46,11 @@ public class Emailer {
     }
 
     public static void send(InternetAddress pFromAddress, InternetAddress pToAddress, String pSubject, String pBody, Integer pCitizenId, String pIncidentId) {
+        if (isEmailToSmsAddress(pToAddress.getAddress())) {
+            log.info("Skipping email-to-SMS message to: " + pToAddress.getAddress());
+            return;
+        }
+
         log.info("Sending an email with subject: " + pSubject + " to recipient: " + pToAddress.getAddress());
 
         Transport transport = null;
@@ -132,21 +137,21 @@ public class Emailer {
         }
     }
 
-    /** Popular mobile carriers that support email-to-sms */
-    public static boolean supportsEmailToSMS(String pEmailAddress) {
-        if (pEmailAddress != null &&
-            (pEmailAddress.indexOf("@txt.att.net") > 0 ||
-            pEmailAddress.indexOf("@messaging.sprintpcs.com") > 0 ||
-            pEmailAddress.indexOf("@tmomail.net") > 0 ||
-            pEmailAddress.indexOf("@vtext.com") > 0 ||
-            pEmailAddress.indexOf("@metropcs.sms.us") > 0 ||
-            pEmailAddress.indexOf("@sms.mycricket.com") > 0 ||
-            pEmailAddress.indexOf("@email.uscc.net") > 0 ||
-            pEmailAddress.indexOf("@sms.myboostmobile.com") > 0)) {
-            return true;
-        } else {
+    /** Carrier gateways that turn an email into an SMS. We no longer send to these. */
+    public static boolean isEmailToSmsAddress(String pEmailAddress) {
+        if (pEmailAddress == null) {
             return false;
         }
+        String emailAddress = pEmailAddress.toLowerCase();
+        return emailAddress.indexOf("@txt.att.net") > 0 ||
+            emailAddress.indexOf("@messaging.sprintpcs.com") > 0 ||
+            emailAddress.indexOf("@tmomail.net") > 0 ||
+            emailAddress.indexOf("@vtext.com") > 0 ||
+            emailAddress.indexOf("@metropcs.sms.us") > 0 ||
+            emailAddress.indexOf("@sms.mycricket.com") > 0 ||
+            emailAddress.indexOf("@email.uscc.net") > 0 ||
+            emailAddress.indexOf("@sms.myboostmobile.com") > 0 ||
+            emailAddress.indexOf("@msg.fi.google.com") > 0;
     }
 
     public static void notify(Exception pException) {
